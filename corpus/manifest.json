@@ -1,0 +1,34 @@
+{
+  "zalando_2025": {
+    "file": "zalando_2025.pdf",
+    "sha256": "817ebceed415077f3508e1c785924a6cf1b7a67431410cf444e363f3bdd05136",
+    "pages": 328,
+    "locale": "en",
+    "near_empty_pages": [
+      1,
+      328
+    ]
+  },
+  "deliveryhero_2025": {
+    "file": "deliveryhero_2025.pdf",
+    "sha256": "8638a48dca6e7a795228590260a1558beb6da1ac3c187d85219bb8283fcb99ce",
+    "pages": 281,
+    "locale": "en",
+    "near_empty_pages": [
+      1,
+      74,
+      121,
+      163,
+      170,
+      253,
+      281
+    ]
+  },
+  "apple_10k_2025": {
+    "file": "apple_10k_2025.pdf",
+    "sha256": "3eb270b22acb7d8d8e9c32a43dc221dec3345f8e4bca02755fdbc1ee16c823de",
+    "pages": 80,
+    "locale": "en",
+    "near_empty_pages": []
+  }
+}

@@ -1,0 +1,24 @@
+# GROUND TRUTH - the answer key every model is graded against.
+#
+# Rules for every entry:
+#   doc      which report (zalando_2025, deliveryhero_2025, apple_10k_2025)
+#   question asked to every model, word for word. Be specific about the year
+#            and what is included, so there is exactly ONE right answer.
+#   type     quantity (a number with unit) or text (e.g. a segment name)
+#   answer   written the way the report writes it, INCLUDING unit and scale
+#            (e.g. "EUR 12,346.1 million", "$416,161 million", "16,021", "14.4%")
+#   page     PDF page number - get it from find.py, not from Preview's footer
+#            Prefer the official financial statements over summary pages.
+#   quote    a short piece of text copied from that page that contains the answer
+#   verified true ONLY after you have looked at that page in the PDF yourself.
+#            Unverified entries are never used to grade a model.
+
+- id: Q01
+  doc: zalando_2025
+  question: "What was Zalando's total revenue for the financial year 2025, according to the consolidated income statement?"
+  type: quantity
+  answer: "EUR 12,346.1 million"
+  page: 234
+  quote: "Revenue (1.) 12,346.1"
+  verified: false
+  notes: "Same figure on 13 pages; p.234 is the consolidated income statement (in m EUR). Found by Claude - Adit to check in the PDF."
