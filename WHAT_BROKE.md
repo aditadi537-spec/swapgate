@@ -45,3 +45,14 @@ Every entry: what happened, why nothing warned us, what we changed.
 - **Side finding:** copying DH p.166 from Preview gives the two columns in order, while PyMuPDF
   interleaves them line by line. Same PDF, different text depending on the reader, and the
   models will get the messy version.
+
+## 7. The "always correct" fake model scored 27/30 (2026-11-06)
+- **What:** fake-old reads the answer key, so it must score 100%. It scored 27/30: for the 3
+  questions where retrieval did not show the official page, it cited that unseen page anyway,
+  and the citation check (correctly) failed it.
+- **Why it matters:** the check worked. A real model answering from memory instead of from the
+  pages would do exactly this - cite something it was never shown - and now we know it gets caught.
+- **Fix:** the fake model, like a real one, may only cite pages it was shown. Then fake-old = 30/30,
+  and fake-new failed on exactly the 5 planted problems: no more, no less.
+- **Lesson:** a known-perfect input is the cheapest way to test a pipeline. If it doesn't score
+  100%, the bug is yours.
