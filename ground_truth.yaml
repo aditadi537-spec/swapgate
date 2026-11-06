@@ -70,8 +70,8 @@
   answer: "EUR 9,257.7 million"
   page: 235
   quote: "Total assets 9,257.7"
-  verified: false
-  notes: "Balance sheet, in m EUR. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.235, 2026-11-06."
 
 - id: Q07
   doc: "zalando_2025"
@@ -80,8 +80,8 @@
   answer: "EUR 1,877.4 million"
   page: 235
   quote: "Cash and cash equivalents (19.) 1,877.4"
-  verified: false
-  notes: "Fell from 2,587.8 the year before. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.235, 2026-11-06."
 
 - id: Q08
   doc: "zalando_2025"
@@ -90,8 +90,8 @@
   answer: "EUR 1,126.3 million"
   page: 239
   quote: "Cash flow from operating activities (26.) 1,126.3"
-  verified: false
-  notes: "Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.239, 2026-11-06."
 
 - id: Q09
   doc: "zalando_2025"
@@ -100,8 +100,8 @@
   answer: "EUR -1,080.3 million"
   page: 239
   quote: "Cash flow from investing activities (26.) -1,080.3"
-  verified: false
-  notes: "NEGATIVE (cash outflow). Sign as printed. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.239, 2026-11-06."
 
 - id: Q10
   doc: "zalando_2025"
@@ -110,8 +110,8 @@
   answer: "62.0 million"
   page: 2
   quote: "Active customers (LTM**) (in m) 62.0"
-  verified: false
-  notes: "KPI only on key-figures page; not in audited statements. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.2, 2026-11-06."
 
 - id: Q11
   doc: "zalando_2025"
@@ -120,8 +120,8 @@
   answer: "EUR 17,560.2 million"
   page: 2
   quote: "(GMV*) (in m EUR) 17,560.2"
-  verified: false
-  notes: "KPI. Not the same as revenue (12,346.1). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.2, 2026-11-06."
 
 - id: Q12
   doc: "zalando_2025"
