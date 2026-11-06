@@ -61,6 +61,9 @@ def main() -> int:
     entry["notes"] = ask("Notes (optional, Enter to skip)", allow_empty=True)
 
     errs = check_entry(entry, manifest, {})
+    for old in entries:
+        if " ".join(str(old.get("question", "")).lower().split()) == " ".join(question.lower().split()):
+            errs.insert(0, f"same question as {old.get('id')} already in the file - did the up-arrow repeat an old answer?")
     if errs:
         print(f"\nNOT SAVED - {next_id} has problems:")
         for e in errs:

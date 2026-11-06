@@ -32,3 +32,285 @@
   quote: "Earnings before interest and taxes (EBIT) 387.2"
   verified: true
   notes: ""
+
+- id: Q03
+  doc: "apple_10k_2025"
+  question: "What were Apple's total net sales for fiscal year 2025, according to the consolidated statements of operations?"
+  type: "quantity"
+  answer: "$416,161 million"
+  page: 32
+  quote: "Total net sales 416,161"
+  verified: true
+  notes: "Products 307,003 + Services 109,158 = 416,161"
+
+- id: Q04
+  doc: "apple_10k_2025"
+  question: "What was Apple's diluted earnings per share for fiscal year 2025?"
+  type: "quantity"
+  answer: "$7.46"
+  page: 32
+  quote: "Diluted $ 7.46"
+  verified: true
+  notes: "Per-share amount, NOT in millions (header exception)"
+
+- id: Q05
+  doc: "apple_10k_2025"
+  question: "How many shares did Apple use to compute basic earnings per share for fiscal year 2025?"
+  type: "quantity"
+  answer: "14,948,500 thousand"
+  page: 32
+  quote: "Basic 14,948,500"
+  verified: true
+  notes: "Shares are in THOUSANDS per header, not millions"
+
+- id: Q06
+  doc: "zalando_2025"
+  question: "What were Zalando's total assets as of 31 December 2025, according to the consolidated statement of financial position?"
+  type: "quantity"
+  answer: "EUR 9,257.7 million"
+  page: 235
+  quote: "Total assets 9,257.7"
+  verified: false
+  notes: "Balance sheet, in m EUR. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q07
+  doc: "zalando_2025"
+  question: "What were Zalando's cash and cash equivalents as of 31 December 2025, according to the consolidated statement of financial position?"
+  type: "quantity"
+  answer: "EUR 1,877.4 million"
+  page: 235
+  quote: "Cash and cash equivalents (19.) 1,877.4"
+  verified: false
+  notes: "Fell from 2,587.8 the year before. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q08
+  doc: "zalando_2025"
+  question: "What was Zalando's cash flow from operating activities for 2025, according to the consolidated statement of cash flows?"
+  type: "quantity"
+  answer: "EUR 1,126.3 million"
+  page: 239
+  quote: "Cash flow from operating activities (26.) 1,126.3"
+  verified: false
+  notes: "Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q09
+  doc: "zalando_2025"
+  question: "What was Zalando's cash flow from investing activities for 2025, according to the consolidated statement of cash flows?"
+  type: "quantity"
+  answer: "EUR -1,080.3 million"
+  page: 239
+  quote: "Cash flow from investing activities (26.) -1,080.3"
+  verified: false
+  notes: "NEGATIVE (cash outflow). Sign as printed. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q10
+  doc: "zalando_2025"
+  question: "How many active customers (last twelve months) did Zalando have in 2025?"
+  type: "quantity"
+  answer: "62.0 million"
+  page: 2
+  quote: "Active customers (LTM**) (in m) 62.0"
+  verified: false
+  notes: "KPI only on key-figures page; not in audited statements. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q11
+  doc: "zalando_2025"
+  question: "What was Zalando's gross merchandise volume (GMV) for 2025?"
+  type: "quantity"
+  answer: "EUR 17,560.2 million"
+  page: 2
+  quote: "(GMV*) (in m EUR) 17,560.2"
+  verified: false
+  notes: "KPI. Not the same as revenue (12,346.1). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q12
+  doc: "zalando_2025"
+  question: "By how many percentage points did Zalando's EBIT margin change from 2024 to 2025?"
+  type: "quantity"
+  answer: "-0.6pp"
+  page: 2
+  quote: "EBIT margin (as %) 3.1 3.7 -0.6pp"
+  verified: false
+  notes: "TRAP: percentage POINTS, not percent. Negative. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q13
+  doc: "zalando_2025"
+  question: "What was Zalando's average number of employees in 2025?"
+  type: "quantity"
+  answer: "16,582"
+  page: 2
+  quote: "Average number of employees 16,582"
+  verified: false
+  notes: "TRAP: AVERAGE over the year, not year-end headcount. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q14
+  doc: "deliveryhero_2025"
+  question: "What was Delivery Hero's revenue for 2025, according to the consolidated statement of profit or loss?"
+  type: "quantity"
+  answer: "EUR 14,059.6 million"
+  page: 166
+  quote: "Revenue G.1 14,059.6"
+  verified: false
+  notes: "TRAP: IFRS revenue. 'Total Segment Revenue' (14,803.4, p.4) is a different figure. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q15
+  doc: "deliveryhero_2025"
+  question: "What was Delivery Hero's net result for 2025, according to the consolidated statement of profit or loss?"
+  type: "quantity"
+  answer: "EUR −698.2 million"
+  page: 166
+  quote: "Net result −698.2"
+  verified: false
+  notes: "NEGATIVE (a loss). Two-column page: text of both columns is merged. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q16
+  doc: "deliveryhero_2025"
+  question: "What were Delivery Hero's basic and diluted earnings per share for 2025?"
+  type: "quantity"
+  answer: "EUR −2.62"
+  page: 166
+  quote: "earnings per share in EUR −2.62"
+  verified: false
+  notes: "Per share, negative. Two-column page. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q17
+  doc: "deliveryhero_2025"
+  question: "What was Delivery Hero's operating result for 2025, according to the consolidated statement of profit or loss?"
+  type: "quantity"
+  answer: "EUR −154.1 million"
+  page: 166
+  quote: "Operating result −154.1"
+  verified: false
+  notes: "Negative. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q18
+  doc: "deliveryhero_2025"
+  question: "What were Delivery Hero's total assets as of 31 December 2025, according to the consolidated statement of financial position?"
+  type: "quantity"
+  answer: "EUR 10,210.0 million"
+  page: 165
+  quote: "Total assets 10,210.0"
+  verified: false
+  notes: "Trailing zero matters for precision. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q19
+  doc: "deliveryhero_2025"
+  question: "What were Delivery Hero's cash and cash equivalents as of 31 December 2025, according to the consolidated statement of financial position?"
+  type: "quantity"
+  answer: "EUR 2,112.7 million"
+  page: 165
+  quote: "Cash and cash equivalents F.8 2,112.7"
+  verified: false
+  notes: "Fell from 3,808.7. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q20
+  doc: "deliveryhero_2025"
+  question: "What was Delivery Hero's group gross merchandise value (GMV) for 2025?"
+  type: "quantity"
+  answer: "EUR 49,196.8 million"
+  page: 4
+  quote: "GMV 49,196.8"
+  verified: false
+  notes: "Key-figures page; group column (first). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q21
+  doc: "deliveryhero_2025"
+  question: "What was Delivery Hero's Total Segment Revenue for 2025?"
+  type: "quantity"
+  answer: "EUR 14,803.4 million"
+  page: 4
+  quote: "Total Segment Revenue 14,803.4"
+  verified: false
+  notes: "TRAP: not IFRS revenue (14,059.6). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q22
+  doc: "deliveryhero_2025"
+  question: "What was Delivery Hero's group adjusted EBITDA for 2025?"
+  type: "quantity"
+  answer: "EUR 903.0 million"
+  page: 4
+  quote: "Adj. EBITDA 903.0"
+  verified: false
+  notes: "Group column (first). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q23
+  doc: "deliveryhero_2025"
+  question: "By what percentage did GMV in Delivery Hero's Asia segment change from 2024 to 2025?"
+  type: "quantity"
+  answer: "−11.2%"
+  page: 4
+  quote: "GMV 20,779.7 23,407.4 −11.2%"
+  verified: false
+  notes: "Negative growth while group grew. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q24
+  doc: "apple_10k_2025"
+  question: "What were Apple's total assets as of the end of fiscal year 2025, according to the consolidated balance sheets?"
+  type: "quantity"
+  answer: "$359,241 million"
+  page: 34
+  quote: "Total assets $ 359,241"
+  verified: false
+  notes: "Total assets FELL vs 2024 (364,980). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q25
+  doc: "apple_10k_2025"
+  question: "What were Apple's cash and cash equivalents as of the end of fiscal year 2025, according to the consolidated balance sheets?"
+  type: "quantity"
+  answer: "$35,934 million"
+  page: 34
+  quote: "Cash and cash equivalents $ 35,934"
+  verified: false
+  notes: "Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q26
+  doc: "apple_10k_2025"
+  question: "Approximately how many full-time equivalent employees did Apple have at the end of fiscal year 2025?"
+  type: "quantity"
+  answer: "166,000"
+  page: 7
+  quote: "approximately 166,000 full-time equivalent employees"
+  verified: false
+  notes: "Rounded figure in the text, not a table. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q27
+  doc: "apple_10k_2025"
+  question: "What were Apple's net sales in the Greater China segment for fiscal year 2025?"
+  type: "quantity"
+  answer: "$64,377 million"
+  page: 25
+  quote: "Greater China 64,377"
+  verified: false
+  notes: "Segment table, dollars in millions. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q28
+  doc: "apple_10k_2025"
+  question: "By what percentage did Apple's Greater China net sales change in fiscal year 2025 compared to 2024?"
+  type: "quantity"
+  answer: "(4)%"
+  page: 25
+  quote: "Greater China 64,377 (4)%"
+  verified: false
+  notes: "NEGATIVE in accounting brackets. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q29
+  doc: "apple_10k_2025"
+  question: "Which of Apple's reportable segments had the highest net sales in fiscal year 2025?"
+  type: "text"
+  answer: "Americas"
+  page: 25
+  quote: "Americas $ 178,353"
+  aliases: ["Americas", "The Americas", "Americas segment"]
+  verified: false
+  notes: "Text answer. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+
+- id: Q30
+  doc: "apple_10k_2025"
+  question: "Which of Apple's reportable segments had the highest percentage growth in net sales in fiscal year 2025?"
+  type: "text"
+  answer: "Japan"
+  page: 25
+  quote: "Japan 28,703 15 %"
+  aliases: ["Japan", "Japan segment"]
+  verified: false
+  notes: "Japan +15% beats Europe +10%, Rest of Asia Pacific +10%. Drafted by Claude from extracted text. Adit to confirm in the PDF."

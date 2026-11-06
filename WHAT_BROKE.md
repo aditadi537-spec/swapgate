@@ -22,3 +22,16 @@ Every entry: what happened, why nothing warned us, what we changed.
   gate would have blocked a good model because of a bug in *our* grader.
 - **Fix:** a minus only counts directly before the number. Test written first, seen
   failing (red), then fixed (green). 33 tests.
+
+## 4. The answer-key checker said OK to a duplicate (2026-11-06)
+- **What:** while adding Q05, Terminal's up-arrow recalled Q04's answers. Q05 was saved
+  as an exact copy of Q04. Every check passed, because the quote really was on page 32.
+- **Why silent:** each entry was checked on its own; nothing compared entries with each other.
+  A duplicated fact would have counted twice in the grid and skewed every model's score.
+- **Caught by:** a human reading the saved output, not by the tool.
+- **Fix:** verify.py and add.py now refuse a repeated question, or the same answer on the
+  same page. Lesson: check each record, then check the records against each other.
+
+## 5. Hand-typed YAML broke on indentation twice (2026-11-06)
+- **What:** editing Q01 in TextEdit produced 4 spaces, then 3 spaces, then a line break inside a quote.
+- **Fix:** add.py asks each field and writes the YAML itself. Humans supply facts, the tool supplies format.

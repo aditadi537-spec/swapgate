@@ -99,6 +99,7 @@ def main() -> int:
         return 1
 
     problems, pending, ok, seen, cache = {}, [], [], set(), {}
+    seen_q, seen_fact = {}, {}
     for i, e in enumerate(entries, start=1):
         eid = e.get("id", f"entry #{i}") if isinstance(e, dict) else f"entry #{i}"
         if not isinstance(e, dict):
@@ -108,6 +109,15 @@ def main() -> int:
         if eid in seen:
             errs.insert(0, "duplicate id")
         seen.add(eid)
+        # Same question, or same answer on the same page = the same fact counted twice.
+        q_key = squash(e.get("question", ""))
+        fact_key = (e.get("doc"), e.get("page"), squash(e.get("answer", "")))
+        if q_key in seen_q:
+            errs.insert(0, f"same question as {seen_q[q_key]} - did the up-arrow repeat an old answer?")
+        elif fact_key in seen_fact:
+            errs.insert(0, f"same answer on the same page as {seen_fact[fact_key]} - duplicate fact?")
+        seen_q.setdefault(q_key, eid)
+        seen_fact.setdefault(fact_key, eid)
         if errs:
             problems[eid] = errs
         elif e["verified"]:
