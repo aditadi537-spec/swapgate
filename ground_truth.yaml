@@ -20,5 +20,15 @@
   answer: "EUR 12,346.1 million"
   page: 234
   quote: "Revenue (1.) 12,346.1"
-  verified: false
-  notes: "Same figure on 13 pages; p.234 is the consolidated income statement (in m EUR). Found by Claude - Adit to check in the PDF."
+  verified: true
+  notes: "Checked by Adit in PDF p.234, 2026-11-06."
+
+- id: Q02
+  doc: "zalando_2025"
+  question: "What was Zalando's EBIT for the financial year 2025, according to the consolidated income statement?"
+  type: "quantity"
+  answer: "EUR 387.2 million"
+  page: 234
+  quote: "Earnings before interest and taxes (EBIT) 387.2"
+  verified: true
+  notes: ""
