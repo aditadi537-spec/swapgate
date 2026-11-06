@@ -35,3 +35,13 @@ Every entry: what happened, why nothing warned us, what we changed.
 ## 5. Hand-typed YAML broke on indentation twice (2026-11-06)
 - **What:** editing Q01 in TextEdit produced 4 spaces, then 3 spaces, then a line break inside a quote.
 - **Fix:** add.py asks each field and writes the YAML itself. Humans supply facts, the tool supplies format.
+
+## 6. Confirming is weaker than reading (2026-11-06)
+- **What:** confirm.py shows the drafted answer next to the page number. Saying "y" to a number
+  you are shown is easier than reading it yourself, because the eye tends to agree. Three
+  entries were confirmed in a rushed moment and had to be reset and re-checked.
+- **Fix:** reset the doubtful ones, then a BLIND spot-check: for 3 of the hardest entries, Adit got
+  only the question and page and read the value himself. 3/3 matched the answer key.
+- **Side finding:** copying DH p.166 from Preview gives the two columns in order, while PyMuPDF
+  interleaves them line by line. Same PDF, different text depending on the reader, and the
+  models will get the messy version.

@@ -130,8 +130,8 @@
   answer: "-0.6pp"
   page: 2
   quote: "EBIT margin (as %) 3.1 3.7 -0.6pp"
-  verified: false
-  notes: "TRAP: percentage POINTS, not percent. Negative. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.2, 2026-11-06."
 
 - id: Q13
   doc: "zalando_2025"
@@ -140,8 +140,8 @@
   answer: "16,582"
   page: 2
   quote: "Average number of employees 16,582"
-  verified: false
-  notes: "TRAP: AVERAGE over the year, not year-end headcount. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.2, 2026-11-06."
 
 - id: Q14
   doc: "deliveryhero_2025"
@@ -150,8 +150,8 @@
   answer: "EUR 14,059.6 million"
   page: 166
   quote: "Revenue G.1 14,059.6"
-  verified: false
-  notes: "TRAP: IFRS revenue. 'Total Segment Revenue' (14,803.4, p.4) is a different figure. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.166, 2026-11-06."
 
 - id: Q15
   doc: "deliveryhero_2025"
@@ -160,8 +160,8 @@
   answer: "EUR −698.2 million"
   page: 166
   quote: "Net result −698.2"
-  verified: false
-  notes: "NEGATIVE (a loss). Two-column page: text of both columns is merged. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.166, 2026-11-06."
 
 - id: Q16
   doc: "deliveryhero_2025"
@@ -170,8 +170,8 @@
   answer: "EUR −2.62"
   page: 166
   quote: "earnings per share in EUR −2.62"
-  verified: false
-  notes: "Per share, negative. Two-column page. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.166, 2026-11-06."
 
 - id: Q17
   doc: "deliveryhero_2025"
@@ -180,8 +180,8 @@
   answer: "EUR −154.1 million"
   page: 166
   quote: "Operating result −154.1"
-  verified: false
-  notes: "Negative. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.166, 2026-11-06."
 
 - id: Q18
   doc: "deliveryhero_2025"
@@ -190,8 +190,8 @@
   answer: "EUR 10,210.0 million"
   page: 165
   quote: "Total assets 10,210.0"
-  verified: false
-  notes: "Trailing zero matters for precision. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.165, 2026-11-06."
 
 - id: Q19
   doc: "deliveryhero_2025"
@@ -200,8 +200,8 @@
   answer: "EUR 2,112.7 million"
   page: 165
   quote: "Cash and cash equivalents F.8 2,112.7"
-  verified: false
-  notes: "Fell from 3,808.7. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.165, 2026-11-06."
 
 - id: Q20
   doc: "deliveryhero_2025"
@@ -210,8 +210,8 @@
   answer: "EUR 49,196.8 million"
   page: 4
   quote: "GMV 49,196.8"
-  verified: false
-  notes: "Key-figures page; group column (first). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.4, 2026-11-06."
 
 - id: Q21
   doc: "deliveryhero_2025"
@@ -220,8 +220,8 @@
   answer: "EUR 14,803.4 million"
   page: 4
   quote: "Total Segment Revenue 14,803.4"
-  verified: false
-  notes: "TRAP: not IFRS revenue (14,059.6). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.4, 2026-11-06."
 
 - id: Q22
   doc: "deliveryhero_2025"
@@ -230,8 +230,8 @@
   answer: "EUR 903.0 million"
   page: 4
   quote: "Adj. EBITDA 903.0"
-  verified: false
-  notes: "Group column (first). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.4, 2026-11-06."
 
 - id: Q23
   doc: "deliveryhero_2025"
@@ -240,8 +240,8 @@
   answer: "−11.2%"
   page: 4
   quote: "GMV 20,779.7 23,407.4 −11.2%"
-  verified: false
-  notes: "Negative growth while group grew. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.4, 2026-11-06."
 
 - id: Q24
   doc: "apple_10k_2025"
@@ -250,8 +250,8 @@
   answer: "$359,241 million"
   page: 34
   quote: "Total assets $ 359,241"
-  verified: false
-  notes: "Total assets FELL vs 2024 (364,980). Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.34, 2026-11-06."
 
 - id: Q25
   doc: "apple_10k_2025"
@@ -260,8 +260,8 @@
   answer: "$35,934 million"
   page: 34
   quote: "Cash and cash equivalents $ 35,934"
-  verified: false
-  notes: "Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.34, 2026-11-06."
 
 - id: Q26
   doc: "apple_10k_2025"
@@ -270,8 +270,8 @@
   answer: "166,000"
   page: 7
   quote: "approximately 166,000 full-time equivalent employees"
-  verified: false
-  notes: "Rounded figure in the text, not a table. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.7, 2026-11-06."
 
 - id: Q27
   doc: "apple_10k_2025"
@@ -280,8 +280,8 @@
   answer: "$64,377 million"
   page: 25
   quote: "Greater China 64,377"
-  verified: false
-  notes: "Segment table, dollars in millions. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.25, 2026-11-06."
 
 - id: Q28
   doc: "apple_10k_2025"
@@ -290,8 +290,8 @@
   answer: "(4)%"
   page: 25
   quote: "Greater China 64,377 (4)%"
-  verified: false
-  notes: "NEGATIVE in accounting brackets. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.25, 2026-11-06."
 
 - id: Q29
   doc: "apple_10k_2025"
@@ -301,8 +301,8 @@
   page: 25
   quote: "Americas $ 178,353"
   aliases: ["Americas", "The Americas", "Americas segment"]
-  verified: false
-  notes: "Text answer. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.25, 2026-11-06."
 
 - id: Q30
   doc: "apple_10k_2025"
@@ -312,5 +312,5 @@
   page: 25
   quote: "Japan 28,703 15 %"
   aliases: ["Japan", "Japan segment"]
-  verified: false
-  notes: "Japan +15% beats Europe +10%, Rest of Asia Pacific +10%. Drafted by Claude from extracted text. Adit to confirm in the PDF."
+  verified: true
+  notes: "Confirmed by Adit in PDF p.25, 2026-11-06."
