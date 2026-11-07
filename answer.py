@@ -91,8 +91,13 @@ def combine(raw_value: str, unit: str) -> str:
     return out
 
 
+DASHES = str.maketrans({"\u2212": "-", "\u2013": "-", "\u2014": "-", "\u2012": "-", "\u2010": "-"})
+
+
 def _nospace(s: str) -> str:
-    return re.sub(r"\s+", "", s).lower()
+    """For quote matching: ignore spacing, case, and WHICH dash character is used.
+    The same report prints a minus as − on one page and – on another (DH p.166 vs p.85)."""
+    return re.sub(r"\s+", "", s).lower().translate(DASHES)
 
 
 def grade(entry: dict, reply_text: str, shown: dict[int, str], locale: str = "en") -> dict:

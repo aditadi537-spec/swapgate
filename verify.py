@@ -27,8 +27,12 @@ REQUIRED = ["id", "doc", "question", "type", "answer", "page", "quote", "verifie
 NUM = re.compile(r"\d[\d.,']*\d|\d")
 
 
+DASHES = str.maketrans({"\u2212": "-", "\u2013": "-", "\u2014": "-", "\u2012": "-", "\u2010": "-"})
+
+
 def squash(s: str) -> str:
-    return re.sub(r"\s+", " ", str(s)).strip().lower()
+    """Collapse spacing, lower-case, and treat all dash characters as '-' (reports mix them)."""
+    return re.sub(r"\s+", " ", str(s)).strip().lower().translate(DASHES)
 
 
 def load_pages(doc_id: str) -> dict[int, str]:

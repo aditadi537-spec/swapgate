@@ -63,3 +63,15 @@ def test_prompt_contains_every_shown_page_once():
 def test_non_numeric_page_is_bad_format():
     with pytest.raises(BadFormat):
         parse_reply('{"raw_value": "1", "unit": "", "source_quote": "", "page": "two hundred"}')
+
+
+def test_dash_variants_in_quotes_count_as_the_same():
+    # Found 2026-11-07 with a real model: DH p.85 prints "–" (en dash), p.166 prints "−" (minus).
+    # A model retyping one as the other is not fabricating a quote.
+    shown = {85: "Net result –698.2 –881.7 183.4 –20.8"}
+    reply = '{"raw_value": "−698.2", "unit": "EUR million", "source_quote": "Net result −698.2 −881.7", "page": 85}'
+    entry = {"type": "quantity", "answer": "EUR −698.2 million"}
+    assert grade(entry, reply, shown)["verdict"] == "pass"
+    # ...but a different NUMBER is still a fabricated quote
+    bad = reply.replace("−881.7", "−818.7")
+    assert grade(entry, bad, shown)["verdict"] == "bad_citation"

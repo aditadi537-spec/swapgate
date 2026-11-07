@@ -73,16 +73,20 @@ def main() -> int:
         for m in models:
             for rep in range(1, args.repeats + 1):
                 t0 = time.time()
-                reply = m.ask(messages)
+                try:
+                    reply = m.ask(messages)
+                    g = grade(e, reply, shown, manifest[e["doc"]]["locale"])
+                except Exception as ex:   # a failed CALL is recorded, never silently skipped
+                    reply = ""
+                    g = {"verdict": "error", "detail": str(ex)[:300], "reply": None}
                 secs = time.time() - t0
-                g = grade(e, reply, shown, manifest[e["doc"]]["locale"])
                 r = g["reply"] or {}
                 db.execute("INSERT INTO results VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (
                     run_id, m.name, e["id"], rep, g["verdict"], g["detail"],
                     r.get("raw_value"), r.get("unit"), r.get("source_quote"), r.get("page"),
                     reply, json.dumps(sorted(shown)), int(e["page"] in shown), round(secs, 3)))
         db.commit()
-        print(f"  {e['id']} done", end="\r")
+        print(f"  {e['id']} done", flush=True)
 
     expected = len(entries) * len(models) * args.repeats
     saved = db.execute("SELECT COUNT(*) FROM results WHERE run_id=?", (run_id,)).fetchone()[0]

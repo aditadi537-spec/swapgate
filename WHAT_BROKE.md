@@ -56,3 +56,12 @@ Every entry: what happened, why nothing warned us, what we changed.
   and fake-new failed on exactly the 5 planted problems: no more, no less.
 - **Lesson:** a known-perfect input is the cheapest way to test a pipeline. If it doesn't score
   100%, the bug is yours.
+
+## 8. Two different minus signs in one report (2026-11-07, first real model)
+- **What:** qwen3:8b answered Delivery Hero's net result correctly (−698.2) and cited p.85.
+  The citation check said "quote not on page". Page 85 prints the minus as "–" (en dash,
+  U+2013); page 166 prints it as "−" (minus sign, U+2212). The quote used the p.166 character.
+- **Why silent:** the characters look identical. Every model would have been marked down on
+  Delivery Hero for a fabricated citation, and we would have blamed the models.
+- **Fix:** citation and answer-key checks treat all dash characters as the same; a different
+  NUMBER in a quote still fails. Test written from the real reply, seen red, then green.

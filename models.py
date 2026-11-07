@@ -70,7 +70,133 @@ class FakeModel:
         return json.dumps(reply, ensure_ascii=False)
 
 
+# ---------------------------------------------------------------------------
+# Real models. Every call has a timeout; failures raise ModelError, which the
+# runner records as verdict "error" instead of crashing or hanging.
+# ---------------------------------------------------------------------------
+import os
+import time
+import urllib.error
+import urllib.request
+
+# The structure every model must reply in (same fields answer.py checks).
+ANSWER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "raw_value": {"type": ["string", "null"]},
+        "unit": {"type": "string"},
+        "source_quote": {"type": "string"},
+        "page": {"type": ["integer", "null"]},
+    },
+    "required": ["raw_value", "unit", "source_quote", "page"],
+}
+
+
+class ModelError(RuntimeError):
+    pass
+
+
+def load_env() -> None:
+    """Read KEY=value lines from .env into the environment (no extra library).
+    .env is git-ignored, so keys never end up in the project history."""
+    path = ROOT / ".env"
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+
+def _post_json(url: str, body: dict, headers: dict, timeout: float) -> dict:
+    req = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST",
+                                 headers={"Content-Type": "application/json", **headers})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode(errors="replace")[:300]
+        raise ModelError(f"HTTP {e.code}: {detail}") from None
+    except (urllib.error.URLError, TimeoutError) as e:
+        raise ModelError(f"no response ({e}) - is the service running?") from None
+
+
+class OllamaModel:
+    """A model running locally on this Mac through Ollama (free, no limits)."""
+    URL = "http://localhost:11434/api/chat"
+    NUM_CTX = 16384   # how much text the model may read. Set explicitly: the default
+                      # is smaller and Ollama would SILENTLY cut the start of our prompt.
+
+    def __init__(self, model: str, timeout: float = 300):
+        self.model, self.timeout = model, timeout
+        self.name = f"ollama:{model}"
+
+    def ask(self, messages: list[dict]) -> str:
+        body = {
+            "model": self.model, "messages": messages, "stream": False,
+            "format": ANSWER_SCHEMA,                 # Ollama constrains output to our structure
+            "options": {"num_ctx": self.NUM_CTX},
+        }
+        if self.model.startswith("qwen"):
+            body["think"] = False                    # no long reasoning text before the answer
+        r = _post_json(self.URL, body, {}, self.timeout)
+        read = r.get("prompt_eval_count") or 0
+        if read >= self.NUM_CTX - 64:
+            raise ModelError(f"prompt cut off: model read {read} tokens, window is {self.NUM_CTX}")
+        return r.get("message", {}).get("content", "")
+
+
+class GeminiModel:
+    """Google's Gemini through the free API tier. Key comes from GEMINI_API_KEY in .env."""
+    BASE = "https://generativelanguage.googleapis.com/v1beta/models"
+
+    def __init__(self, model: str, timeout: float = 120, min_gap: float = 7.0, retries: int = 3):
+        load_env()
+        self.key = os.environ.get("GEMINI_API_KEY", "")
+        if not self.key:
+            raise ModelError("GEMINI_API_KEY missing - put it in the .env file")
+        self.model, self.timeout, self.min_gap, self.retries = model, timeout, min_gap, retries
+        self.name = f"gemini:{model}"
+        self._last = 0.0
+
+    def ask(self, messages: list[dict]) -> str:
+        system = next(m["content"] for m in messages if m["role"] == "system")
+        user = next(m["content"] for m in messages if m["role"] == "user")
+        body = {
+            "systemInstruction": {"parts": [{"text": system}]},
+            "contents": [{"role": "user", "parts": [{"text": user}]}],
+            "generationConfig": {"responseMimeType": "application/json"},
+        }
+        for attempt in range(1, self.retries + 1):
+            wait = self.min_gap - (time.time() - self._last)   # stay under the free per-minute limit
+            if wait > 0:
+                time.sleep(wait)
+            self._last = time.time()
+            try:
+                r = _post_json(f"{self.BASE}/{self.model}:generateContent",
+                               body, {"x-goog-api-key": self.key}, self.timeout)
+                parts = r["candidates"][0]["content"]["parts"]
+                return "".join(p.get("text", "") for p in parts)
+            except ModelError as e:
+                # 429 = too many requests: wait and retry, but only a few times (retries
+                # that never stop can burn the whole daily allowance).
+                if "HTTP 429" in str(e) and attempt < self.retries:
+                    time.sleep(30 * attempt)
+                    continue
+                raise
+            except (KeyError, IndexError):
+                raise ModelError(f"unexpected reply shape: {str(r)[:200]}") from None
+        raise ModelError("gave up after retries")
+
+
 def get_model(name: str):
+    """'fake-old', 'ollama:qwen3:8b', 'gemini:gemini-2.5-flash', ..."""
     if name in ("fake-old", "fake-new"):
         return FakeModel(name)
-    raise ValueError(f"unknown model {name!r} (real models arrive in step 3)")
+    provider, _, model = name.partition(":")
+    if provider == "ollama" and model:
+        return OllamaModel(model)
+    if provider == "gemini" and model:
+        return GeminiModel(model)
+    raise ValueError(f"unknown model {name!r}. Use fake-old, fake-new, ollama:<model> or gemini:<model>")
