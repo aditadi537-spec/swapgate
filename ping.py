@@ -6,6 +6,7 @@ Usage: uv run python ping.py ollama:qwen3:8b Q01
 import json
 import sys
 import time
+import urllib.error
 import urllib.request
 
 import yaml
@@ -20,8 +21,15 @@ def list_gemini() -> None:
     load_env()
     req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200",
                                  headers={"x-goog-api-key": os.environ.get("GEMINI_API_KEY", "")})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        models = json.loads(r.read())["models"]
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            models = json.loads(r.read())["models"]
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")
+        msg = json.loads(body).get("error", {}).get("message", body[:200]) if body.startswith("{") else body[:200]
+        print(f"Google refused the request (HTTP {e.code}): {msg}")
+        print("Most likely the key in .env is wrong or has extra text. Re-copy it with the copy button.")
+        sys.exit(1)
     for m in models:
         if "generateContent" in m.get("supportedGenerationMethods", []):
             print(" ", m["name"].removeprefix("models/"))
@@ -43,7 +51,12 @@ def main() -> None:
     print(f"Pages shown:   {sorted(shown)}   prompt size: {chars:,} characters (~{chars // 4:,} tokens)\n")
     m = get_model(model_name)
     t0 = time.time()
-    reply = m.ask(messages)
+    print("Asking... (this can take a while; it prints the reason if it has to wait)", flush=True)
+    try:
+        reply = m.ask(messages)
+    except Exception as ex:
+        print(f"\nFAILED after {time.time() - t0:.0f}s: {ex}")
+        sys.exit(1)
     print(f"Reply after {time.time() - t0:.1f}s:\n  {reply.strip()[:500]}\n")
     g = grade(entry, reply, shown)
     print(f"VERDICT: {g['verdict']}   {g['detail']}")

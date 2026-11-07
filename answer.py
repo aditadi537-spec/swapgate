@@ -8,7 +8,10 @@ Verdicts, checked in this order (the first problem found wins):
   bad_format     reply is not valid JSON in our structure
   no_answer      the model said it could not find the answer (raw_value null)
   unparseable / unit_mismatch / low_precision / wrong_value   - from normalize.py
-  bad_citation   value is right, but the quote is not on the page the model cited
+  loose_quote    value is right, the quote's numbers are on the cited page, but its wording
+                 is not verbatim (e.g. a heading stitched into a table row)
+  bad_citation   value is right, but the quote contains numbers that are NOT on the cited
+                 page, or the cited page was never shown - invented evidence
   pass           right value, right unit, real quote on the cited page
 """
 from __future__ import annotations
@@ -91,6 +94,7 @@ def combine(raw_value: str, unit: str) -> str:
     return out
 
 
+_NUM = re.compile(r"\d[\d.,']*\d|\d")
 DASHES = str.maketrans({"\u2212": "-", "\u2013": "-", "\u2014": "-", "\u2012": "-", "\u2010": "-"})
 
 
@@ -120,6 +124,18 @@ def grade(entry: dict, reply_text: str, shown: dict[int, str], locale: str = "en
     page = r["page"]
     if page not in shown:
         return {"verdict": "bad_citation", "detail": f"cited page {page} was not among the pages shown {sorted(shown)}", "reply": r}
-    if not r["source_quote"].strip() or _nospace(r["source_quote"]) not in _nospace(shown[page]):
-        return {"verdict": "bad_citation", "detail": f"quote not found on cited page {page}", "reply": r}
+    quote = r["source_quote"]
+    if not quote.strip():
+        return {"verdict": "bad_citation", "detail": "no quote given", "reply": r}
+    if _nospace(quote) not in _nospace(shown[page]):
+        # Not verbatim. Are all its NUMBERS on the cited page (stitched/reworded quote),
+        # or does it contain numbers that are not there (invented evidence)?
+        q_nums = set(_NUM.findall(quote.translate(DASHES)))
+        page_nums = set(_NUM.findall(shown[page].translate(DASHES)))
+        if q_nums and q_nums <= page_nums:
+            return {"verdict": "loose_quote",
+                    "detail": f"numbers are on page {page}, but the wording is not verbatim", "reply": r}
+        missing = sorted(q_nums - page_nums)
+        why = f"numbers {missing} are not on page {page}" if missing else f"quote not found on page {page}"
+        return {"verdict": "bad_citation", "detail": why, "reply": r}
     return {"verdict": "pass", "detail": "", "reply": r}

@@ -65,3 +65,29 @@ Every entry: what happened, why nothing warned us, what we changed.
   Delivery Hero for a fabricated citation, and we would have blamed the models.
 - **Fix:** citation and answer-key checks treat all dash characters as the same; a different
   NUMBER in a quote still fails. Test written from the real reply, seen red, then green.
+
+## 9. The cloud model was too busy to take the exam (2026-11-07)
+- **What:** Gemini 3.7 Flash on the free tier: one timeout after 120s, then "HTTP 503 - this model
+  is currently experiencing high demand". Gemini 3.8 Flash passed on the same question minutes later.
+- **Why it matters:** a server failure is not a wrong answer. A gate that counted it as one would
+  block a good model because Google was busy on a Saturday evening.
+- **Fix:** timeouts on every call, 429/503 retried a few times with a visible message, and failed
+  calls recorded as verdict "error", which the gate must never count as a regression.
+- **Decision:** the live demo runs on local models (qwen3 -> qwen3.5): free, unlimited, offline,
+  so it cannot be "too busy" while recording. Gemini 3.7 -> 3.8 is the second, cloud pair.
+
+## 10. Two page numbers on every page (2026-11-07, qwen3:8b)
+- **What:** Apple Q26: right answer, but cited "page 4". Our label said "=== PAGE 7 ===", and the
+  page's own footer says "Apple Inc. | 2025 Form 10-K | 4". The model used the printed number.
+- **Why it matters:** the input itself contains a competing page number. Real customer documents
+  have footers too - a citation check is only as good as how unambiguous the page labels are.
+- **Decision:** NOT fixed mid-experiment. Changing the prompt between the old and new model's runs
+  would change the workflow being tested - and tuning the setup until results look good is
+  exactly the habit this project warns against. Both models get the same input.
+- **Later improvement:** strip printed footers, or label pages so they can't be confused.
+
+## 11. A grading rule changed after a run had started (2026-11-07)
+- **What:** loose_quote was added while qwen3:8b was mid-run, so its replies were judged by old rules.
+- **Fix:** every raw reply is stored, so regrade.py re-judges all runs with the current rules in
+  seconds, without asking any model again. Comparing runs judged by different rules is as
+  invalid as comparing runs with different answer keys.

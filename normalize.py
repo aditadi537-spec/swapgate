@@ -190,7 +190,14 @@ def compare(answer_raw: str, truth: Truth, answer_locale: str | None = None) -> 
     diff = abs(a.value - t.value)
     if diff <= tolerance:
         return Result(Verdict.PASS)
-    return Result(Verdict.WRONG_VALUE, f"off by {diff:,} (tolerance {tolerance:,})")
+    return Result(Verdict.WRONG_VALUE, f"got {_fmt(a.value)} {a.unit or ''}, expected {_fmt(t.value)} "
+                                       f"{t.unit or ''} - off by {_fmt(diff)}".replace("  ", " "))
+
+
+def _fmt(d: Decimal) -> str:
+    """3.80639E+9 -> '3,806,390,000'; 0.82 -> '0.82'. Readable numbers in failure messages."""
+    s = f"{d.normalize():,f}"
+    return s.rstrip("0").rstrip(".") if "." in s else s
 
 
 def _norm_text(s: str) -> str:

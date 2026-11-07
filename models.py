@@ -109,7 +109,7 @@ def load_env() -> None:
             os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
 
-def _post_json(url: str, body: dict, headers: dict, timeout: float) -> dict:
+def _post_json(url: str, body: dict, headers: dict, timeout: float, who: str = "the service") -> dict:
     req = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST",
                                  headers={"Content-Type": "application/json", **headers})
     try:
@@ -119,7 +119,7 @@ def _post_json(url: str, body: dict, headers: dict, timeout: float) -> dict:
         detail = e.read().decode(errors="replace")[:300]
         raise ModelError(f"HTTP {e.code}: {detail}") from None
     except (urllib.error.URLError, TimeoutError) as e:
-        raise ModelError(f"no response ({e}) - is the service running?") from None
+        raise ModelError(f"{who} did not answer within {timeout:.0f}s ({e})") from None
 
 
 class OllamaModel:
@@ -140,7 +140,7 @@ class OllamaModel:
         }
         if self.model.startswith("qwen"):
             body["think"] = False                    # no long reasoning text before the answer
-        r = _post_json(self.URL, body, {}, self.timeout)
+        r = _post_json(self.URL, body, {}, self.timeout, who="Ollama (is the app running?)")
         read = r.get("prompt_eval_count") or 0
         if read >= self.NUM_CTX - 64:
             raise ModelError(f"prompt cut off: model read {read} tokens, window is {self.NUM_CTX}")
@@ -151,7 +151,7 @@ class GeminiModel:
     """Google's Gemini through the free API tier. Key comes from GEMINI_API_KEY in .env."""
     BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
-    def __init__(self, model: str, timeout: float = 120, min_gap: float = 7.0, retries: int = 3):
+    def __init__(self, model: str, timeout: float = 240, min_gap: float = 7.0, retries: int = 3):
         load_env()
         self.key = os.environ.get("GEMINI_API_KEY", "")
         if not self.key:
@@ -159,6 +159,7 @@ class GeminiModel:
         self.model, self.timeout, self.min_gap, self.retries = model, timeout, min_gap, retries
         self.name = f"gemini:{model}"
         self._last = 0.0
+        self.thinking = {"thinkingLevel": "low"}   # less hidden reasoning = faster; dropped if unsupported
 
     def ask(self, messages: list[dict]) -> str:
         system = next(m["content"] for m in messages if m["role"] == "system")
@@ -168,6 +169,8 @@ class GeminiModel:
             "contents": [{"role": "user", "parts": [{"text": user}]}],
             "generationConfig": {"responseMimeType": "application/json"},
         }
+        if self.thinking:
+            body["generationConfig"]["thinkingConfig"] = self.thinking
         for attempt in range(1, self.retries + 1):
             wait = self.min_gap - (time.time() - self._last)   # stay under the free per-minute limit
             if wait > 0:
@@ -175,14 +178,25 @@ class GeminiModel:
             self._last = time.time()
             try:
                 r = _post_json(f"{self.BASE}/{self.model}:generateContent",
-                               body, {"x-goog-api-key": self.key}, self.timeout)
+                               body, {"x-goog-api-key": self.key}, self.timeout, who=self.name)
                 parts = r["candidates"][0]["content"]["parts"]
                 return "".join(p.get("text", "") for p in parts)
             except ModelError as e:
+                if "HTTP 400" in str(e) and "thinking" in str(e).lower() and self.thinking:
+                    print(f"    [{self.name}] does not accept the thinking setting - retrying without it", flush=True)
+                    self.thinking = None
+                    body["generationConfig"].pop("thinkingConfig", None)
+                    continue
                 # 429 = too many requests: wait and retry, but only a few times (retries
                 # that never stop can burn the whole daily allowance).
-                if "HTTP 429" in str(e) and attempt < self.retries:
-                    time.sleep(30 * attempt)
+                busy = "HTTP 429" in str(e) or "HTTP 503" in str(e)   # rate limit, or "high demand"
+                if busy and attempt < self.retries:
+                    pause = 30 * attempt
+                    # never wait silently: say why, and show Google's own reason
+                    print(f"    [{self.name}] Google is busy or rate-limiting ({str(e)[:8]}). "
+                          f"Waiting {pause}s, then retry {attempt + 1}/{self.retries}. Reason: {str(e)[9:160]}",
+                          flush=True)
+                    time.sleep(pause)
                     continue
                 raise
             except (KeyError, IndexError):

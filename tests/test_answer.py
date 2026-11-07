@@ -29,7 +29,8 @@ def J(raw='"12,346.1"', unit='"EUR million"', quote='"Revenue (1.) 12,346.1"', p
     (J(raw='"12,346.1"', unit='"EUR"'), "wrong_value"),            # dropped 'million'
     (J(raw='"10,572.5"'), "wrong_value"),                          # wrong year's column
     (J(unit='"USD million"'), "unit_mismatch"),
-    (J(quote='"Revenue was a record 12,346.1"'), "bad_citation"),  # made-up quote
+    (J(quote='"Revenue was a record 12,346.1"'), "loose_quote"),   # real number, invented wording
+    (J(quote='"Revenue 12,346.1, up 22.3%"'), "bad_citation"),      # 22.3 is on no shown page: invented
     (J(page="99"), "bad_citation"),                                # page never shown
     (J(raw="null", quote='""', page="null"), "no_answer"),
     ("The revenue was EUR 12,346.1 million.", "bad_format"),       # prose only
@@ -75,3 +76,16 @@ def test_dash_variants_in_quotes_count_as_the_same():
     # ...but a different NUMBER is still a fabricated quote
     bad = reply.replace("−881.7", "−818.7")
     assert grade(entry, bad, shown)["verdict"] == "bad_citation"
+
+
+def test_stitched_quote_is_loose_not_invented():
+    # Found 2026-11-07 with qwen3:8b on Apple p.32: it merged the heading "Earnings per share:"
+    # into the row "Diluted $ 7.46 $ 6.08 $ 6.13". Value and page right, wording not verbatim.
+    shown = {32: "Earnings per share:\nBasic $ 7.49 $ 6.11 $ 6.16\nDiluted $ 7.46 $ 6.08 $ 6.13"}
+    entry = {"type": "quantity", "answer": "$7.46"}
+    stitched = '{"raw_value": "7.46", "unit": "$", "source_quote": "Diluted earnings per share $ 7.46 $ 6.08 $ 6.13", "page": 32}'
+    verbatim = '{"raw_value": "7.46", "unit": "$", "source_quote": "Diluted $ 7.46 $ 6.08", "page": 32}'
+    invented = '{"raw_value": "7.46", "unit": "$", "source_quote": "Diluted EPS rose to $ 7.46 from $ 5.90", "page": 32}'
+    assert grade(entry, stitched, shown)["verdict"] == "loose_quote"
+    assert grade(entry, verbatim, shown)["verdict"] == "pass"
+    assert grade(entry, invented, shown)["verdict"] == "bad_citation"   # 5.90 appears nowhere
