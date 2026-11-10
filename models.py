@@ -119,6 +119,9 @@ def _post_json(url: str, body: dict, headers: dict, timeout: float, who: str = "
         detail = e.read().decode(errors="replace")[:300]
         raise ModelError(f"HTTP {e.code}: {detail}") from None
     except (urllib.error.URLError, TimeoutError) as e:
+        reason = getattr(e, "reason", e)
+        if isinstance(reason, ConnectionRefusedError):          # nobody listening at all
+            raise ModelError(f"could not connect to {who} - nothing is listening") from None
         raise ModelError(f"{who} did not answer within {timeout:.0f}s ({e})") from None
 
 

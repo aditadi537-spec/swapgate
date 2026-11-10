@@ -38,12 +38,23 @@ def fingerprint(path: Path) -> str:
 def main() -> int:
     out_dir = ROOT / "corpus_text"
     out_dir.mkdir(exist_ok=True)
+    manifest_path = ROOT / "corpus" / "manifest.json"
+    # The committed fingerprints are the proof of WHICH files the answer key was verified
+    # against. They are compared, never silently replaced.
+    committed = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     manifest, problems = {}, []
 
     for doc_id, (fname, locale) in DOCS.items():
         path = ROOT / "corpus" / fname
         if not path.exists():
             problems.append(f"{doc_id}: file not found at {path}")
+            continue
+
+        sha = fingerprint(path)
+        expected = committed.get(doc_id, {}).get("sha256")
+        if expected and sha != expected:
+            problems.append(f"{doc_id}: {fname} is a DIFFERENT file than the answer key was verified against "
+                            f"(sha256 {sha[:12]}..., expected {expected[:12]}...). Download the exact version.")
             continue
 
         doc = pymupdf.open(path)
@@ -64,20 +75,20 @@ def main() -> int:
 
         manifest[doc_id] = {
             "file": fname,
-            "sha256": fingerprint(path),
+            "sha256": sha,
             "pages": doc.page_count,
             "locale": locale,
             "near_empty_pages": near_empty,
         }
         print(f"{doc_id:20} {doc.page_count:4} pages   {len(near_empty):3} near-empty   -> {out_file.name}")
 
-    (ROOT / "corpus" / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-
     if problems:
         print("\nREFUSED - extraction does not reconcile:")
         for p in problems:
             print("  -", p)
+        print("(corpus/manifest.json was NOT changed.)")
         return 1
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     print("\nOK - every page extracted and reconciled. Manifest: corpus/manifest.json")
     return 0
 

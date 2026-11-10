@@ -91,3 +91,15 @@ Every entry: what happened, why nothing warned us, what we changed.
 - **Fix:** every raw reply is stored, so regrade.py re-judges all runs with the current rules in
   seconds, without asking any model again. Comparing runs judged by different rules is as
   invalid as comparing runs with different answer keys.
+
+## 12. A refused extraction erased the proof (2026-11-10, fresh-clone test)
+- **What:** testing the repo the way a stranger would (fresh clone, follow the README) showed
+  that extract.py, when it REFUSED because the PDFs were missing, still overwrote
+  corpus/manifest.json with an empty file - erasing the fingerprints of the exact PDFs the
+  answer key was verified against. And with PDFs present, it never compared them to those
+  fingerprints: a different version of a report would have been accepted silently.
+- **Why silent:** every piece had been tested on its own, on a machine that already had the PDFs.
+- **Fix:** fingerprints are compared, never silently replaced; nothing is written on refusal.
+  Tested: no PDFs -> refused, manifest untouched; right PDFs -> identical fingerprints;
+  Apple's 10-K renamed to zalando_2025.pdf -> "DIFFERENT file than the answer key was verified against".
+- **Lesson:** test the way the next person will use it, not the way you built it.
