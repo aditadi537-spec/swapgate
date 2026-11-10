@@ -56,6 +56,20 @@ def statuses(db, run_id: int, model: str) -> dict[str, dict]:
     return out
 
 
+def decide(old: dict, new: dict) -> dict:
+    """THE rule, in one place (gate and report both use it, so they can never disagree):
+    every question the old model answers reliably must still be answered reliably."""
+    out = {"kept": [], "regressions": [], "unknown": [], "improvements": []}
+    for qid in sorted(old):
+        o, n = old[qid]["status"], new[qid]["status"]
+        if o == "reliable":
+            key = "kept" if n == "reliable" else "unknown" if n == "inconclusive" else "regressions"
+            out[key].append(qid)
+        elif n == "reliable":
+            out["improvements"].append(qid)
+    return out
+
+
 def compare(db, old_model: str, old_run: int, new_model: str, new_run: int, label: str) -> int:
     sha = dict(db.execute("SELECT run_id, ground_truth_sha256 FROM runs WHERE run_id IN (?,?)",
                           (old_run, new_run)).fetchall())
@@ -70,18 +84,8 @@ def compare(db, old_model: str, old_run: int, new_model: str, new_run: int, labe
               f"(only in old: {sorted(set(old) - set(new))}, only in new: {sorted(set(new) - set(old))}).")
         return REFUSED
 
-    regressions, unknown, improvements, kept = [], [], [], 0
-    for qid in sorted(old):
-        o, n = old[qid], new[qid]
-        if o["status"] == "reliable":
-            if n["status"] == "reliable":
-                kept += 1
-            elif n["status"] == "inconclusive":
-                unknown.append(qid)
-            else:
-                regressions.append(qid)
-        elif n["status"] == "reliable":
-            improvements.append(qid)
+    d = decide(old, new)
+    regressions, unknown, improvements, kept = d["regressions"], d["unknown"], d["improvements"], len(d["kept"])
 
     print(f"{label}\n  old: {old_model} (run {old_run})   new: {new_model} (run {new_run})\n")
     print(f"  still reliable: {kept}   regressions: {len(regressions)}   "

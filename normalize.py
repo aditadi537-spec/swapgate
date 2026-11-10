@@ -190,8 +190,9 @@ def compare(answer_raw: str, truth: Truth, answer_locale: str | None = None) -> 
     diff = abs(a.value - t.value)
     if diff <= tolerance:
         return Result(Verdict.PASS)
-    return Result(Verdict.WRONG_VALUE, f"got {_fmt(a.value)} {a.unit or ''}, expected {_fmt(t.value)} "
-                                       f"{t.unit or ''} - off by {_fmt(diff)}".replace("  ", " "))
+    got = " ".join(x for x in (_fmt(a.value), a.unit) if x)          # no stray space when unit is missing
+    want = " ".join(x for x in (_fmt(t.value), t.unit) if x)
+    return Result(Verdict.WRONG_VALUE, f"got {got}, expected {want} - off by {_fmt(diff)}")
 
 
 def _fmt(d: Decimal) -> str:
